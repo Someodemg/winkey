@@ -1,0 +1,19 @@
+h1 {
+    text-align: center;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+button {
+    display: block;
+    margin: 0 auto;
+}
+
+p {
+    text-align: center;
+    font-weight: bold;
+}
