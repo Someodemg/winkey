@@ -1,12 +1,71 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Windows Key Detector</title>
+  <title>Google Play Redeem Code Checker</title>
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: #000000;
+      color: #ffffff;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .result {
+      font-size: 20px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Windows Key Detector</h1>
-    <form method="POST">
-        <input type="submit" value="Detect Windows Key">
-    </form>
+  <h1>Google Play Redeem Code Checker</h1>
+
+  <input type="text" id="code" placeholder="Enter a Google Play redeem code">
+  <button type="button" id="check-code">Check Code</button>
+
+  <div class="result"></div>
+
+  <script>
+    document.getElementById("check-code").addEventListener("click", function() {
+      var code = document.getElementById("code").value;
+
+      // Check the validity of the code.
+      var url = "https://play.googleapis.com/payments/v1/validations/googlePlay:giftCard:code";
+      var headers = {"Content-Type": "application/json"};
+      var data = {"code": code, "country": "IN"};
+
+      fetch(url, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(data)
+      })
+      .then(function(response) {
+        // Check the response status code.
+        if (response.status === 200) {
+          // The code is valid.
+          response.json().then(function(data) {
+            var amount = data["balanceMicros"] / 1000000;
+            document.querySelector(".result").innerHTML = "The code is valid and has ₹{:.2f}.".format(amount);
+          });
+        } else {
+          // The code is not valid.
+          document.querySelector(".result").innerHTML = "The code is not valid.";
+        }
+      })
+      .catch(function(error) {
+        // An error occurred while making the request.
+        document.querySelector(".result").innerHTML = "An error occurred while checking the code.";
+      });
+    });
+  </script>
 </body>
-</html>
+    </html>
+    
